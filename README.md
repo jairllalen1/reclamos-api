@@ -104,16 +104,16 @@ entity_type
 
 Campos principales:
 
-| Campo | Descripción |
-|---|---|
-| `id_entity_type` | Identificador del tipo de entidad |
-| `name_type_entity` | Nombre del tipo de entidad |
-| `entity_size` | Tamaño de la entidad |
-| `sector` | Sector al que pertenece |
-| `id_user_create` | Usuario que creó el registro |
-| `id_user_update` | Usuario que actualizó el registro |
-| `date_create` | Fecha de creación |
-| `date_update` | Fecha de actualización |
+| Campo              | Descripción                       |
+|--------------------|-----------------------------------|
+| `id_entity_type`   | Identificador del tipo de entidad |
+| `name_type_entity` | Nombre del tipo de entidad        |
+| `entity_size`      | Tamaño de la entidad              |
+| `sector`           | Sector al que pertenece           |
+| `id_user_create`   | Usuario que creó el registro      |
+| `id_user_update`   | Usuario que actualizó el registro |
+| `date_create`      | Fecha de creación                 |
+| `date_update`      | Fecha de actualización            |
 
 ---
 
@@ -287,7 +287,45 @@ Respuesta exitosa:
 
 ---
 
-## Ejemplo de respuesta exitosa
+## Ejemplos de respuestas exitosas
+
+### Ejemplo de respuesta - GET `/api/entity-types`
+
+```json
+[
+  {
+    "idEntityType": 1,
+    "nameTypeEntity": "Comercio",
+    "entitySize": "Mediana",
+    "sector": "Comercio",
+    "idUserCreate": 1,
+    "idUserUpdate": null,
+    "dateCreate": "2026-05-03",
+    "dateUpdate": null
+  }
+]
+```
+
+---
+
+### Ejemplo de respuesta - GET `/api/entity-types/{id}`
+
+```json
+{
+  "idEntityType": 1,
+  "nameTypeEntity": "Comercio",
+  "entitySize": "Mediana",
+  "sector": "Comercio",
+  "idUserCreate": 1,
+  "idUserUpdate": null,
+  "dateCreate": "2026-05-03",
+  "dateUpdate": null
+}
+```
+
+---
+
+### Ejemplo de respuesta - POST `/api/entity-types`
 
 ```json
 {
@@ -299,6 +337,23 @@ Respuesta exitosa:
   "idUserUpdate": null,
   "dateCreate": "2026-05-03",
   "dateUpdate": null
+}
+```
+
+---
+
+### Ejemplo de respuesta - PUT `/api/entity-types/{id}`
+
+```json
+{
+  "idEntityType": 1,
+  "nameTypeEntity": "Institución educativa",
+  "entitySize": "Grande",
+  "sector": "Educación",
+  "idUserCreate": 1,
+  "idUserUpdate": 1,
+  "dateCreate": "2026-05-03",
+  "dateUpdate": "2026-05-13"
 }
 ```
 
@@ -367,7 +422,351 @@ requests.http
 ```
 
 Este archivo permite probar los endpoints desde IntelliJ IDEA Ultimate sin usar Postman.
+---
 
+## Demostración con Postman
+
+Para cumplir con la demostración manual de los endpoints, se utilizó Postman como cliente HTTP.
+
+La API debe estar ejecutándose localmente en:
+
+```text
+http://localhost:8080
+```
+
+Antes de probar los endpoints en Postman, se debe verificar que:
+
+- MySQL esté corriendo.
+- La base de datos `reclamos_dev` exista.
+- El script `database/schema.sql` haya sido ejecutado.
+- Las variables de entorno `DB_USER` y `DB_PASSWORD` estén configuradas.
+- La aplicación Spring Boot esté levantada en el puerto `8080`.
+
+---
+
+### Colección de Postman
+
+Se creó una colección llamada:
+
+```text
+Reclamos API
+```
+
+Dentro de la colección se cargaron las requests necesarias para demostrar el CRUD completo de la tabla `entity_type`.
+
+---
+
+### Variable de entorno
+
+Opcionalmente, se puede crear un environment llamado:
+
+```text
+Reclamos Local
+```
+
+Con la siguiente variable:
+
+| Variable  | Valor                   |
+|-----------|-------------------------|
+| `baseUrl` | `http://localhost:8080` |
+
+De esta forma, las URLs pueden escribirse usando:
+
+```text
+{{baseUrl}}/api/entity-types
+```
+
+También se puede usar la URL completa directamente:
+
+```text
+http://localhost:8080/api/entity-types
+```
+
+---
+
+## Requests cargadas en Postman
+
+### 1. Listar todos los tipos de entidad
+
+```http
+GET {{baseUrl}}/api/entity-types
+```
+
+Respuesta esperada:
+
+```http
+200 OK
+```
+
+Ejemplo de respuesta:
+
+```json
+[
+  {
+    "idEntityType": 1,
+    "nameTypeEntity": "Comercio",
+    "entitySize": "Mediana",
+    "sector": "Comercio",
+    "idUserCreate": 1,
+    "idUserUpdate": null,
+    "dateCreate": "2026-05-03",
+    "dateUpdate": null
+  }
+]
+```
+
+---
+
+### 2. Buscar un tipo de entidad por ID
+
+```http
+GET {{baseUrl}}/api/entity-types/{id}
+```
+
+Ejemplo:
+
+```http
+GET {{baseUrl}}/api/entity-types/1
+```
+
+Respuesta esperada:
+
+```http
+200 OK
+```
+
+Ejemplo de respuesta:
+
+```json
+{
+  "idEntityType": 1,
+  "nameTypeEntity": "Comercio",
+  "entitySize": "Mediana",
+  "sector": "Comercio",
+  "idUserCreate": 1,
+  "idUserUpdate": null,
+  "dateCreate": "2026-05-03",
+  "dateUpdate": null
+}
+```
+
+---
+
+### 3. Crear un tipo de entidad
+
+```http
+POST {{baseUrl}}/api/entity-types
+```
+
+Body:
+
+```json
+{
+  "nameTypeEntity": "Comercio",
+  "entitySize": "Mediana",
+  "sector": "Comercio",
+  "idUserCreate": 1
+}
+```
+
+Respuesta esperada:
+
+```http
+201 Created
+```
+
+Ejemplo de respuesta:
+
+```json
+{
+  "idEntityType": 20,
+  "nameTypeEntity": "Comercio",
+  "entitySize": "Mediana",
+  "sector": "Comercio",
+  "idUserCreate": 1,
+  "idUserUpdate": null,
+  "dateCreate": "2026-05-13",
+  "dateUpdate": null
+}
+```
+
+---
+
+### 4. Actualizar un tipo de entidad
+
+```http
+PUT {{baseUrl}}/api/entity-types/{id}
+```
+
+Ejemplo:
+
+```http
+PUT {{baseUrl}}/api/entity-types/20
+```
+
+Body:
+
+```json
+{
+  "nameTypeEntity": "Institución educativa",
+  "entitySize": "Grande",
+  "sector": "Educación",
+  "idUserUpdate": 1
+}
+```
+
+Respuesta esperada:
+
+```http
+200 OK
+```
+
+Ejemplo de respuesta:
+
+```json
+{
+  "idEntityType": 20,
+  "nameTypeEntity": "Institución educativa",
+  "entitySize": "Grande",
+  "sector": "Educación",
+  "idUserCreate": 1,
+  "idUserUpdate": 1,
+  "dateCreate": "2026-05-13",
+  "dateUpdate": "2026-05-13"
+}
+```
+
+---
+
+### 5. Eliminar un tipo de entidad
+
+```http
+DELETE {{baseUrl}}/api/entity-types/{id}
+```
+
+Ejemplo:
+
+```http
+DELETE {{baseUrl}}/api/entity-types/20
+```
+
+Respuesta esperada:
+
+```http
+204 No Content
+```
+
+Esta respuesta no devuelve cuerpo, ya que el registro fue eliminado correctamente.
+
+---
+
+## Pruebas de errores controlados
+
+Además del CRUD principal, se probaron errores controlados para verificar el manejo de excepciones y validaciones.
+
+---
+
+### 6. Error 404: ID inexistente
+
+```http
+GET {{baseUrl}}/api/entity-types/9999
+```
+
+Respuesta esperada:
+
+```http
+404 Not Found
+```
+
+Ejemplo de respuesta:
+
+```json
+{
+  "timestamp": "2026-05-13T20:30:00",
+  "status": 404,
+  "error": "Not Found",
+  "message": "No existe un tipo de entidad con ID: 9999"
+}
+```
+
+Este caso demuestra que la API responde correctamente cuando se consulta un recurso inexistente.
+
+---
+
+### 7. Error 400: campos obligatorios vacíos
+
+```http
+POST {{baseUrl}}/api/entity-types
+```
+
+Body inválido:
+
+```json
+{
+  "nameTypeEntity": "",
+  "entitySize": "",
+  "sector": "",
+  "idUserCreate": 1
+}
+```
+
+Respuesta esperada:
+
+```http
+400 Bad Request
+```
+
+Ejemplo de respuesta:
+
+```json
+{
+  "timestamp": "2026-05-13T20:30:00",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "Error de validación",
+  "errors": {
+    "nameTypeEntity": "El nombre del tipo de entidad es obligatorio",
+    "entitySize": "El tamaño de la entidad es obligatorio",
+    "sector": "El sector es obligatorio"
+  }
+}
+```
+
+Este caso demuestra que la API valida los datos de entrada antes de guardar información en la base de datos.
+
+---
+
+## Orden recomendado para la demostración en clase
+
+Para exponer el funcionamiento del CRUD, se recomienda ejecutar las requests en este orden:
+
+1. `POST /api/entity-types` — crear un nuevo tipo de entidad.
+2. `GET /api/entity-types` — listar todos los tipos de entidad y verificar que el nuevo registro aparece.
+3. `GET /api/entity-types/{id}` — consultar el registro creado por ID.
+4. `PUT /api/entity-types/{id}` — actualizar el registro.
+5. `GET /api/entity-types/{id}` — verificar que los cambios se aplicaron correctamente.
+6. `DELETE /api/entity-types/{id}` — eliminar el registro.
+7. `GET /api/entity-types/{id}` — verificar que el registro eliminado ya no existe.
+8. `GET /api/entity-types/9999` — mostrar el error controlado `404 Not Found`.
+9. `POST /api/entity-types` con campos vacíos — mostrar el error de validación `400 Bad Request`.
+
+---
+
+## Conclusión de la prueba con Postman
+
+La demostración en Postman permite verificar que la API cumple con el CRUD completo:
+
+| Operación          | Método | Endpoint                 | Resultado         |
+|--------------------|--------|--------------------------|-------------------|
+| Listar             | GET    | `/api/entity-types`      | `200 OK`          |
+| Buscar por ID      | GET    | `/api/entity-types/{id}` | `200 OK`          |
+| Crear              | POST   | `/api/entity-types`      | `201 Created`     |
+| Actualizar         | PUT    | `/api/entity-types/{id}` | `200 OK`          |
+| Eliminar           | DELETE | `/api/entity-types/{id}` | `204 No Content`  |
+| ID inexistente     | GET    | `/api/entity-types/9999` | `404 Not Found`   |
+| Validación fallida | POST   | `/api/entity-types`      | `400 Bad Request` |
+
+Con estas pruebas se demuestra el funcionamiento completo de los endpoints asignados, incluyendo casos exitosos y errores controlados.
 ---
 
 ## Ejecución de tests
