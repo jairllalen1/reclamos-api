@@ -1,0 +1,78 @@
+@baseUrl = http://localhost:8080
+@existingId = 2
+@createdId = 20
+
+### Obtener todos los tipos de entidad
+GET {{baseUrl}}/api/entity-types
+
+
+### Obtener un tipo de entidad por ID existente
+GET {{baseUrl}}/api/entity-types/{{existingId}}
+
+
+### Crear un tipo de entidad
+POST {{baseUrl}}/api/entity-types
+Content-Type: application/json
+
+{
+  "nameTypeEntity": "Comercio",
+  "entitySize": "Mediana",
+  "sector": "Comercio",
+  "idUserCreate": 1
+}
+
+
+### Actualizar un tipo de entidad
+# Cambiar @createdId por el ID que devuelva el POST anterior.
+PUT {{baseUrl}}/api/entity-types/{{createdId}}
+Content-Type: application/json
+
+{
+  "nameTypeEntity": "Institución educativa",
+  "entitySize": "Grande",
+  "sector": "Educación",
+  "idUserUpdate": 1
+}
+
+
+### Eliminar un tipo de entidad
+# Cambiar @createdId por el ID que quieras eliminar.
+DELETE {{baseUrl}}/api/entity-types/{{createdId}}
+
+
+### Probar error 404: ID inexistente
+GET {{baseUrl}}/api/entity-types/9999
+
+
+### Probar error 400: campos vacíos en creación
+POST {{baseUrl}}/api/entity-types
+Content-Type: application/json
+
+{
+  "nameTypeEntity": "",
+  "entitySize": "",
+  "sector": "",
+  "idUserCreate": 1
+}
+
+
+### Probar error 400: idUserCreate nulo en creación
+POST {{baseUrl}}/api/entity-types
+Content-Type: application/json
+
+{
+  "nameTypeEntity": "Comercio",
+  "entitySize": "Mediana",
+  "sector": "Comercio"
+}
+
+
+### Probar error 400: idUserUpdate nulo en actualización
+PUT {{baseUrl}}/api/entity-types/{{existingId}}
+Content-Type: application/json
+
+{
+  "nameTypeEntity": "Comercio actualizado",
+  "entitySize": "Grande",
+  "sector": "Tecnología"
+}
